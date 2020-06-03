@@ -11,14 +11,14 @@ We can directly stringfy  our model and stores to cache backend such as redis
 { "firstName":"Bill" , "lastName":"Gates", "house": "111", "married": true, "has_child": false, "id": "063dc500-cbb4-4512-acdd-240596567e65"}
 ```
 
-Or we can use the help of language built in serializer such as `pickle ` in python
+Or we can use the help of language built in serializer such as `pickle` in python
 
 ```python3
 pickle.dumps(a)
 '(dp0\nVfirstName\np1\nVBill\np2\nsVhas_child\np3\nI00\nsVlastName\np4\nVGates\np5\nsVmarried\np6\nI01\nsVhouse\np7\nV111\np8\nsVid\np9\nV063dc500-cbb4-4512-acdd-240596567e65\np10\ns.'
 ```
 
-But what if we a few hundres of different fields ? And we have millions of hot records access freneed to be cached ?
+But what if we have a few hundres of different fields ? And we have millions of hot records need to be cached ?
 
 We need a few hundred GB of memory to store these hot data for each copy, Under the modern HA system, more than one copy will be stored in different server, and if we back up our data in different region, our bandwith may suffer
 
