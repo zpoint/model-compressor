@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from distutils.core import setup, Extension
 
-model_compressor = [Extension('core', sources=['./core/compressor.cpp'], extra_compile_args=['-std=c++11'])]
+model_compressor = [Extension('core', sources=['./core/compress/compressor.cpp'], extra_compile_args=['-std=c++11'])]
 
 setup(name='model_compressor',
       version='1.0',
