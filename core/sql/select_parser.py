@@ -15,6 +15,9 @@ sampleSQL = """CREATE TABLE `t_verify_people_device`
   `c_fields` varchar(300) NOT NULL DEFAULT "" COMMENT '字段信息',
     `c_is_delete` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除',
   `c_auto_del_delay` tinyint(3) NOT NULL DEFAULT -1 COMMENT '延时',
+    state varchar(2),
+    zipcode varchar(10),
+    dob date
     PRIMARY KEY (`c_id`),
   KEY `ix_company` (`c_company_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='表格名称';
@@ -47,6 +50,7 @@ table_def = OneOrMore(OneOrMore(sub_keyword) + "=" + (sub_keyword | string | num
 
 def field_act(s, loc, tok):
     # print("s", s, "loc", loc, "tok", tok)
+    print(tok)
     return [tok]
     # return ("<" + tok[0] + "> " + " ".join(tok)).replace('"', '\\"')
 
