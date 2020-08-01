@@ -66,6 +66,22 @@ class TableParser(object):
 
     @staticmethod
     def parse_table_attr(s, loc, tok):
+        has_primary = False
+        key_name = key_field = None
+        for each in tok:
+            if each == "PRIMARY":
+                has_primary = True
+            if isinstance(each, dict):
+                if has_primary:
+                    d_curr["pk"] = each["field_name"]
+                elif not key_name:
+                    key_name = each["field_name"]
+                elif not key_field:
+                    key_field = each["field_name"]
+        if key_name:
+            if "keys" not in d_curr:
+                d_curr["keys"] = dict()
+            d_curr["keys"][key_name] = key_field
         return {"table_attr": tok}
 
     @staticmethod

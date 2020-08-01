@@ -5,26 +5,12 @@ from pyparsing import (
     alphas,
     alphanums,
     OneOrMore,
-    ZeroOrMore,
-    CharsNotIn,
-    replaceWith,
-    QuotedString,
-    nums,
     Optional,
-    sglQuotedString,
     quotedString,
     removeQuotes,
+    pyparsing_common
 )
-
-from pyparsing import pyparsing_common
 from core.sql.parser import TableParser, d_table
-
-
-def field_act(s, loc, tok):
-    # print("s", s, "loc", loc, "tok", tok)
-    print(tok)
-    return [tok]
-
 
 # tablename
 word = Word(alphas, alphanums + "_")
@@ -36,8 +22,8 @@ number = pyparsing_common.number()
 # column
 type_ = Literal("CHAR") | Literal("VARCHAR") | Literal("TINYTEXT") | Literal("TEXT") | Literal("MEDIUMTEXT") | \
         Literal("LONGTEXT") | Literal("TINYINT") | Literal("SMALLINT") | Literal("MEDIUMINT") | Literal("INT") | \
-        Literal("BIGINT") | Literal("FLOAT") | Literal("DOUBLE") | Literal("DECIMAL") | Literal("DATE") | Literal("DATETIME") | \
-        Literal("TIMESTAMP") | Literal("TIME") | Literal("ENUM") | Literal("SET") | Literal("BLOB")
+        Literal("BIGINT") | Literal("FLOAT") | Literal("DOUBLE") | Literal("DECIMAL") | Literal("DATETIME") | \
+        Literal("DATE") | Literal("TIMESTAMP") | Literal("TIME") | Literal("ENUM") | Literal("SET") | Literal("BLOB")
 enclosing_int = "(" + number + ")"
 enclosing_keyword = "(" + OneOrMore(keyword) + ")"
 nullable = Literal("NOT NULL") | Literal("NULL")

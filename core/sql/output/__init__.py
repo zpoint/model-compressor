@@ -9,6 +9,8 @@ class OutPut(object):
         self.indent = indent
         self.current_indent = self.next_indent = ""
         self.base_model_name = base_model_name
+        self.key_list = list()
+        self.pk = None
 
     def emit_row(self, row_dict: dict) -> str:
         """
@@ -51,3 +53,9 @@ class OutPut(object):
             ret_key += each[0].upper()
             ret_key += each[1:]
         return ret_key
+
+    def get_pk(self, table_dict):
+        if "pk" in table_dict and table_dict["pk"]:
+            self.pk = self.strip_func(table_dict["pk"])
+            return
+        self.pk = None
