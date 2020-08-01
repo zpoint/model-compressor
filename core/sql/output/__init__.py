@@ -1,7 +1,10 @@
+HINT_TEXT = "Code of this model is auto generated from SQL, if you need help please refer to zp0int@qq.com"
+HINT_TEXT_CN = "本段代码由程序从SQL建表语句自动生成, 需要帮助请联系 zp0int@qq.com"
+
 
 class OutPut(object):
     def __init__(self, sql_table_dict: dict, lower_case=True, strip_func=None, indent="    ",
-                 base_model_name="BaseModel"):
+                 base_model_name="BaseModel", hint_text="CN"):
         self.sql_table_dict = sql_table_dict
         self.lower_case = lower_case
         self.strip_func = strip_func if strip_func else self.strip_func
@@ -11,6 +14,7 @@ class OutPut(object):
         self.base_model_name = base_model_name
         self.key_list = list()
         self.pk = None
+        self.hint_text = HINT_TEXT_CN if hint_text == "CN" else HINT_TEXT
 
     def emit_row(self, row_dict: dict) -> str:
         """

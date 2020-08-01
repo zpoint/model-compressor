@@ -45,6 +45,11 @@ class TableParser(object):
         return {"field_length": tok}
 
     @staticmethod
+    def parse_field_length_func(s, loc, tok):
+        tok = TableParser.get_all_int(s, loc, tok)
+        return {"field_length": tok}
+
+    @staticmethod
     def parse_nullable(s, loc, tok):
         if tok == "NULL":
             null = True
@@ -89,6 +94,14 @@ class TableParser(object):
         if tok[0] == "(":
             return tok[1]
         return tok[0]
+
+    @staticmethod
+    def get_all_int(s, loc, tok):
+        ret_list = list()
+        for each in tok:
+            if isinstance(each, int):
+                ret_list.append(each)
+        return ret_list
 
     @staticmethod
     def remove_quotes(s, loc, tok):

@@ -8,7 +8,8 @@ class PeeWeeOutPut(OutPut):
         "TINYINT": "SmallIntegerField",
         "CHAR": "CharField",
         "DATE": "DateField",
-        "DATETIME": "DateTimeField"
+        "DATETIME": "DateTimeField",
+        "DECIMAL": "DecimalField"
     }
 
     def emit_table(self) -> str:
@@ -44,7 +45,16 @@ class PeeWeeOutPut(OutPut):
         else:
             field_type = self.field_type_map[row_dict["field_type"]]
         if isinstance(default, str) and not default_set:
-            default = "\"%s\"" % (default, )
+            # TODO 默认值预处理搬到 parse 层处理, 而不是 emit 层处理
+            if default == "NULL":
+                default = str(None)
+                if "null" not in row_dict:
+                    row_dict["null"] = "True"
+            elif default.isdigit():
+                if field_type in ("IntegerField", "SmallIntegerField"):
+                    default = int(default)
+            else:
+                default = "\"%s\"" % (default, )
 
         ret_str = self.indent + "%s = peewee.%s(%s" % (key, field_type, self.br)
         # max_length
@@ -67,7 +77,9 @@ class PeeWeeOutPut(OutPut):
 
     def emit_table_cls(self, table_name):
         table_name = self.strip_table_func(table_name)
-        ret_str = "class %s(%s):\n" % (table_name, self.base_model_name)
+        ret_str = "class %s(%s):%s\"\"\"%s\"\"\"%s" % (
+            table_name, self.base_model_name, self.br+self.indent, self.hint_text, self.br
+        )
         return ret_str
 
     def emit_table_meta(self, table_name):

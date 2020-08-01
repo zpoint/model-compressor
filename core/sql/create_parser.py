@@ -25,20 +25,22 @@ type_ = Literal("CHAR") | Literal("VARCHAR") | Literal("TINYTEXT") | Literal("TE
         Literal("BIGINT") | Literal("FLOAT") | Literal("DOUBLE") | Literal("DECIMAL") | Literal("DATETIME") | \
         Literal("DATE") | Literal("TIMESTAMP") | Literal("TIME") | Literal("ENUM") | Literal("SET") | Literal("BLOB")
 enclosing_int = "(" + number + ")"
+enclosing_func = "(" + number + OneOrMore("," + number) + ")"
 enclosing_keyword = "(" + OneOrMore(keyword) + ")"
 nullable = Literal("NOT NULL") | Literal("NULL")
-default = Literal("DEFAULT") + (string_literal | number)
+default = Literal("DEFAULT") + (string_literal | number | Literal("NULL"))
 comment = Literal("COMMENT") + string_literal
 auto_inc = Literal("AUTO_INCREMENT")
 
 enclosing_int.setParseAction(TableParser.parse_field_length)
+enclosing_func.setParseAction(TableParser.parse_field_length_func)
 keyword.setParseAction(TableParser.parse_field_name)
 type_.setParseAction(TableParser.parse_field_type)
 nullable.setParseAction(TableParser.parse_nullable)
 auto_inc.setParseAction(TableParser.parse_auto_inc)
 default.setParseAction(TableParser.parse_default_value)
 comment.setParseAction(TableParser.parse_comment)
-col_stm = keyword + type_ + Optional(enclosing_int) + Optional(nullable) + Optional(auto_inc) + Optional(default) + Optional(comment)
+col_stm = keyword + type_ + Optional(enclosing_int | enclosing_func) + Optional(nullable) + Optional(auto_inc) + Optional(default) + Optional(comment)
 col_stm.setParseAction(TableParser.parse_col)
 
 # key
