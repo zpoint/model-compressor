@@ -11,6 +11,10 @@ class PeeWeeOutPut(OutPut):
         "DATETIME": "DateTimeField",
         "DECIMAL": "DecimalField"
     }
+    default_map = {
+        "00000000000000000000000000000000": "NULL_UUID",
+        "1970-01-01 00:00:00": "NULL_DATETIME"
+    }
 
     def emit_table(self) -> str:
         ret_str = ""
@@ -50,9 +54,13 @@ class PeeWeeOutPut(OutPut):
                 default = str(None)
                 if "null" not in row_dict:
                     row_dict["null"] = "True"
+            elif default in self.default_map:
+                default = self.default_map[default]
             elif default.isdigit():
                 if field_type in ("IntegerField", "SmallIntegerField"):
                     default = int(default)
+                else:
+                    default = "\"" + default + "\""
             else:
                 default = "\"%s\"" % (default, )
 
